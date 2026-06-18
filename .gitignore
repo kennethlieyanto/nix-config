@@ -1,0 +1,11 @@
+.env
+.env.local
+*.pem
+*.key
+*.cert
+*.p12
+*.pfx
+*secret*
+*credential*
+result
+result-*
