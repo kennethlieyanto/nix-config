@@ -19,7 +19,7 @@ let
     cz = "chezmoi";
     k = "kubectl";
     tree = "eza --tree --git-ignore";
-    ns= "sudo nixos-rebuild switch -I nixos-config=$HOME/nix-config/configuration.nix";
+    ns= "sudo nixos-rebuild switch --flake $HOME/nix-config#kennethl";
   };
 in
 {
@@ -164,7 +164,6 @@ in
     pavucontrol
     lxappearance
     mdadm
-    ghostty
     brave
     btop
     obsidian
