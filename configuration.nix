@@ -71,6 +71,15 @@
     shell = pkgs.zsh;
   };
 
+  programs.dconf.enable = true;
+
+  xdg.portal = {
+    enable = true;
+    extraPortals = [
+      pkgs.xdg-desktop-portal-gtk
+    ];
+  };
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
@@ -79,6 +88,7 @@
   environment.systemPackages = with pkgs; [
      ghostty
      gnumake
+     gcc
      psmisc
      fzf
      findutils
@@ -100,6 +110,7 @@
      hunspell
      hunspellDicts.uk_UA
      hunspellDicts.id_ID
+     unzip
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

@@ -23,6 +23,13 @@ let
   };
 in
 {
+
+  dconf.settings = {
+    "org/gnome/desktop/interface" = {
+      color-scheme = "prefer-dark";
+    };
+  };
+
   programs.git = {
     enable = true;
   
@@ -165,6 +172,7 @@ in
     lxappearance
     mdadm
     brave
+    google-chrome
     btop
     obsidian
     opencode
@@ -174,6 +182,11 @@ in
     go
     eza
     gh
+    gnome-font-viewer
+    # gsettings-desktop-schemas
+    dotnet-sdk_10
+    nodejs
+    tree-sitter
   ];
 
   home.sessionPath = [
@@ -204,6 +217,24 @@ in
   };
 
   programs.obsidian.cli.enable = true;
+
+  gtk = {
+    enable = true;
+    theme = {
+      name = "Adwaita";
+      package = pkgs.gnome-themes-extra;
+    };
+    iconTheme = {
+      name = "Adwaita";
+      package = pkgs.adwaita-icon-theme;
+    };
+    gtk3.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
+    };
+    gtk4.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
+    };
+  };
 
   home.stateVersion = "26.05";
 }
