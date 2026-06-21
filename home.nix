@@ -187,6 +187,7 @@ in
     dotnet-sdk_10
     nodejs
     tree-sitter
+    roslyn-ls
   ];
 
   home.sessionPath = [
