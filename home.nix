@@ -53,6 +53,7 @@ in
   programs.zsh = {
     enable = true;
     shellAliases = commonAliases;
+    defaultKeymap = "emacs";
     initContent = ''
       bindkey -s '^f' 'tmux-sessionizer\n'
     '';
