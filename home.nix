@@ -19,7 +19,8 @@ let
     cz = "chezmoi";
     k = "kubectl";
     tree = "eza --tree --git-ignore";
-    ns= "sudo nixos-rebuild switch --flake $HOME/nix-config#kennethl";
+    ns = "sudo nixos-rebuild switch --flake $HOME/nix-config#kennethl";
+    t = "task";
   };
 in
 {
@@ -189,6 +190,11 @@ in
     nodejs
     tree-sitter
     roslyn-ls
+    xclip
+    taskwarrior3
+    kubectl
+    kubernetes-helm
+    k9s
   ];
 
   home.sessionPath = [
@@ -245,6 +251,26 @@ in
       obs-backgroundremoval
       obs-pipewire-audio-capture
     ];
+  };
+
+  systemd.user.services.task-sync = {
+    Unit.Description = "Taskwarrior sync";
+
+    Service = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.taskwarrior3}/bin/task sync";
+    };
+  };
+
+  systemd.user.timers.task-sync = {
+    Unit.Description = "Run task sync every 10 minutes";
+  
+    Timer = {
+      OnBootSec = "0";
+      OnUnitActiveSec = "10m";
+    };
+  
+    Install.WantedBy = [ "timers.target" ];
   };
 
   home.stateVersion = "26.05";

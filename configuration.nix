@@ -111,6 +111,8 @@
      hunspellDicts.uk_UA
      hunspellDicts.id_ID
      unzip
+     dnsutils
+     pwgen
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
