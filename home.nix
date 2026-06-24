@@ -34,6 +34,7 @@ let
     rofi = "rofi";
     tmux = "tmux";
     zed = "zed";
+    task = "task";
   };
 in
 {
