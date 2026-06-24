@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, herdr, ... }:
 
 let
   commonAliases = {
@@ -33,6 +33,7 @@ let
     polybar = "polybar";
     rofi = "rofi";
     tmux = "tmux";
+    tmuxinator = "tmuxinator";
     zed = "zed";
     task = "task";
   };
@@ -105,6 +106,7 @@ in
     calibre
     go
     eza
+    herdr.packages.${pkgs.system}.default
     gh
     gnome-font-viewer
     # gsettings-desktop-schemas
@@ -118,6 +120,7 @@ in
     kubernetes-helm
     k9s
     gitleaks
+    tmuxinator
   ];
 
   home.sessionPath = [

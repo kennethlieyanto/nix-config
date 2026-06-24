@@ -7,9 +7,13 @@
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    herdr = {
+      url = "github:ogulcancelik/herdr/v0.7.1";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }: {
+  outputs = { self, nixpkgs, home-manager, herdr, ... }: {
     nixosConfigurations.kennethl = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
@@ -21,6 +25,7 @@
             useUserPackages = true;
             users.kennethl = import ./home.nix;
             backupFileExtension = "backup";
+            extraSpecialArgs = { inherit herdr; };
           };
         }
       ];
