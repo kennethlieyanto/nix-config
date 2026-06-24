@@ -121,6 +121,7 @@ in
     k9s
     gitleaks
     tmuxinator
+    jq
   ];
 
   home.sessionPath = [
