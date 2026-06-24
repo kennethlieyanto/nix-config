@@ -122,6 +122,7 @@ in
 
   home.sessionPath = [
     "$HOME/.local/bin"
+    "$HOME/.config/tmux/bin"
   ];
 
   services.dunst = {
