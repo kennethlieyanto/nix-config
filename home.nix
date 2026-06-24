@@ -117,6 +117,7 @@ in
     kubectl
     kubernetes-helm
     k9s
+    gitleaks
   ];
 
   home.sessionPath = [
