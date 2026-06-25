@@ -71,6 +71,7 @@ in
     defaultKeymap = "emacs";
     initContent = ''
       bindkey -s '^f' 'tmux-sessionizer\n'
+      bindkey -s '^t' 'tmux-sessionizer -t\n'
     '';
   };
 
