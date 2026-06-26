@@ -69,6 +69,10 @@
     extraGroups = [ "networkmanager" "wheel" "video" "audio"];
     packages = with pkgs; [];
     shell = pkgs.zsh;
+
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN52WotGSFEXGAYpT1YVuk9BsUsX01rfofYkEMv5aTjn root@kennethl-asuslaptop"
+    ];
   };
 
   programs.dconf.enable = true;
