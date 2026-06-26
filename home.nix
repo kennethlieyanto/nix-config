@@ -16,7 +16,6 @@ let
     jc = "just --choose";
     g = "git";
     tf = "terraform";
-    cz = "chezmoi";
     k = "kubectl";
     tree = "eza --tree --git-ignore";
     ns = "cd $HOME/nix-config && sudo nixos-rebuild switch --flake .#kennethl";
@@ -36,9 +35,17 @@ let
     tmuxinator = "tmuxinator";
     zed = "zed";
     task = "task";
+    herdr = "herdr";
   };
 in
 {
+  xdg.configFile = builtins.mapAttrs
+    (name: subpath: {
+      source = create_symlink "${dotfiles}/${subpath}";
+      recursive = true;
+    })
+    configs;
+
   dconf.settings = {
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";
@@ -89,7 +96,6 @@ in
   };
 
   home.packages = with pkgs; [
-    chezmoi
     lazygit
     zoxide
     thunar
@@ -128,6 +134,7 @@ in
   home.sessionPath = [
     "$HOME/.local/bin"
     "$HOME/.config/tmux/bin"
+    "$HOME/.config/herdr/bin"
   ];
 
   services.dunst = {
