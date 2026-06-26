@@ -129,6 +129,7 @@ in
     gitleaks
     tmuxinator
     jq
+    just
   ];
 
   home.sessionPath = [
