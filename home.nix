@@ -210,17 +210,17 @@ in
     Install.WantedBy = [ "timers.target" ];
   };
 
-  systemd.user.services.k3s-sqlite-pull = {
-    Unit.Description = "Pull K3s SQLite backup from homeserver";
+  systemd.user.services.k3s-cluster-backup = {
+    Unit.Description = "Pull K3s Cluster backup from homeserver";
 
     Service = {
       Type = "oneshot";
-      ExecStart = create_symlink "${config.home.homeDirectory}/Projects/personal/homeserver/k3s-backup/pull-sqlite";
+      ExecStart = create_symlink "${config.home.homeDirectory}/Projects/personal/homeserver/k3s-backup/backup-cluster";
     };
   };
 
-  systemd.user.timers.k3s-sqlite-pull = {
-    Unit.Description = "K3s SQLite pull backup at 20:00";
+  systemd.user.timers.k3s-cluster-backup = {
+    Unit.Description = "K3s cluster backup at 20:00";
 
     Timer = {
       OnCalendar = "*-*-* 20:00:00";
