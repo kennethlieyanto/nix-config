@@ -210,12 +210,26 @@ in
     Install.WantedBy = [ "timers.target" ];
   };
 
-  xdg.configFile = builtins.mapAttrs
-    (name: subpath: {
-      source = create_symlink "${dotfiles}/${subpath}";
-      recursive = true;
-    })
-    configs;
+  systemd.user.services.k3s-sqlite-pull = {
+    Unit.Description = "Pull K3s SQLite backup from homeserver";
+
+    Service = {
+      Type = "oneshot";
+      ExecStart = create_symlink "${config.home.homeDirectory}/Projects/personal/homeserver/k3s-backup/pull-sqlite";
+    };
+  };
+
+  systemd.user.timers.k3s-sqlite-pull = {
+    Unit.Description = "K3s SQLite pull backup at 20:00";
+
+    Timer = {
+      OnCalendar = "*-*-* 20:00:00";
+      RandomizedDelaySec = "2min";
+      Persistent = true;
+    };
+
+    Install.WantedBy = [ "timers.target" ];
+  };
 
   home.stateVersion = "26.05";
 }
