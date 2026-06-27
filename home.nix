@@ -95,9 +95,14 @@ in
     };
   };
 
+  programs.zoxide = {
+    enable = true;
+    enableBashIntegration = true;
+    enableZshIntegration = true;
+  };
+
   home.packages = with pkgs; [
     lazygit
-    zoxide
     thunar
     dunst
     pavucontrol
@@ -129,6 +134,7 @@ in
     gitleaks
     tmuxinator
     jq
+    zoxide
     just
   ];
 
