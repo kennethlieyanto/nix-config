@@ -244,6 +244,9 @@
   };
 
   services.tailscale.enable = true;
+  # Provide explicit upstream DNS so Tailscale MagicDNS always has
+  # resolvers even if NetworkManager hasn't finished DHCP at boot
+  networking.nameservers = [ "1.1.1.1" "8.8.8.8" ];
   networking.nftables.enable = true;
   networking.firewall = {
     enable = true;
