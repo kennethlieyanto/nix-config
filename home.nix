@@ -194,6 +194,7 @@ in
     borgbackup
     nautilus
     portfolio
+    nitrogen
   ];
 
   home.sessionPath = [
