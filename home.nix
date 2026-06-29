@@ -193,6 +193,7 @@ in
     argocd
     borgbackup
     nautilus
+    portfolio
   ];
 
   home.sessionPath = [
