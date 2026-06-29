@@ -87,6 +87,51 @@ in
     enableZshIntegration = true; # or enableBashIntegration
   };
 
+  programs.borgmatic = {
+    enable = true;
+    backups."kennethl-ws" = {
+      location = {
+        sourceDirectories = [
+          "${config.home.homeDirectory}/Documents"
+          "${config.home.homeDirectory}/Pictures"
+          "${config.home.homeDirectory}/Videos"
+          "${config.home.homeDirectory}/Calibre Library"
+          "${config.home.homeDirectory}/Music"
+          "${config.home.homeDirectory}/Vaults"
+        ];
+        repositories = [
+          {
+            path = "/mnt/backup/borg-repositories/kennethl-ws";
+            label = "local";
+          }
+        ];
+        extraConfig = {
+          exclude_patterns = [
+            ".cache"
+            ".local/share/Trash"
+          ];
+        };
+      };
+      storage = {
+        encryptionPasscommand = "${pkgs.pass}/bin/pass backup/borg";
+        extraConfig = {
+          compression = "auto,zstd";
+        };
+      };
+      retention = {
+        keepDaily = 7;
+        keepWeekly = 4;
+        keepMonthly = 6;
+      };
+      consistency = {
+        checks = [
+          { name = "repository"; frequency = "2 weeks"; }
+          { name = "archives"; frequency = "1 month"; }
+        ];
+      };
+    };
+  };
+
   programs.btop = {
     enable = true;
   
@@ -99,6 +144,11 @@ in
     enable = true;
     enableBashIntegration = true;
     enableZshIntegration = true;
+  };
+
+  services.gpg-agent = {
+    enable = true;
+    pinentryPackage = pkgs.pinentry-curses;
   };
 
   home.packages = with pkgs; [
@@ -114,7 +164,10 @@ in
     obsidian
     opencode
     starship
-    borgbackup
+    borgmatic
+    pass
+    gnupg
+    pinentry-curses
     calibre
     go
     eza
@@ -136,6 +189,8 @@ in
     jq
     zoxide
     just
+    argocd
+    borgbackup
   ];
 
   home.sessionPath = [
@@ -231,6 +286,27 @@ in
     Timer = {
       OnCalendar = "*-*-* 20:00:00";
       RandomizedDelaySec = "2min";
+      Persistent = true;
+    };
+
+    Install.WantedBy = [ "timers.target" ];
+  };
+
+  systemd.user.services.borgmatic = {
+    Unit.Description = "Run borgmatic backup";
+
+    Service = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.borgmatic}/bin/borgmatic";
+    };
+  };
+
+  systemd.user.timers.borgmatic = {
+    Unit.Description = "Run borgmatic backup daily at 03:00";
+
+    Timer = {
+      OnCalendar = "*-*-* 03:00:00";
+      RandomizedDelaySec = "30min";
       Persistent = true;
     };
 
