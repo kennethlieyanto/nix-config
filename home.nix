@@ -1,4 +1,4 @@
-{ config, pkgs, herdr, ... }:
+{ config, pkgs, herdr, hunk, ... }:
 
 let
   commonAliases = {
@@ -172,6 +172,7 @@ in
     go
     eza
     herdr.packages.${pkgs.system}.default
+    hunk.packages.${pkgs.stdenv.hostPlatform.system}.default
     gh
     gnome-font-viewer
     # gsettings-desktop-schemas
