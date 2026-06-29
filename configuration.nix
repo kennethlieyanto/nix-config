@@ -243,6 +243,8 @@
     mountOnMedia = true;
   };
 
+  services.gvfs.enable = true;
+
   services.tailscale.enable = true;
   # Provide explicit upstream DNS so Tailscale MagicDNS always has
   # resolvers even if NetworkManager hasn't finished DHCP at boot

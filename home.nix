@@ -192,6 +192,7 @@ in
     just
     argocd
     borgbackup
+    nautilus
   ];
 
   home.sessionPath = [
