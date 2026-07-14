@@ -117,6 +117,7 @@
      unzip
      dnsutils
      pwgen
+     openssl
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -244,6 +245,13 @@
   };
 
   services.gvfs.enable = true;
+  
+  services.input-remapper = {
+    enable = true;
+
+    # Recommended if you frequently reconnect your mouse.
+    enableUdevRules = true;
+  };
 
   services.tailscale.enable = true;
   # Provide explicit upstream DNS so Tailscale MagicDNS always has
@@ -270,6 +278,10 @@
   boot.initrd.systemd.network.wait-online.enable = false;
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  networking.hosts = {
+    "192.168.105.29" = [ "kditsvmvc.suryapamenang.local" ];
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

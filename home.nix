@@ -195,6 +195,11 @@ in
     nautilus
     portfolio
     nitrogen
+    zed-editor
+    vlc
+    xdotool
+    xbindkeys
+    xorg.xev
   ];
 
   home.sessionPath = [
@@ -315,6 +320,10 @@ in
     };
 
     Install.WantedBy = [ "timers.target" ];
+  };
+
+  home.sessionVariables = {
+    TERMINAL = "ghostty";
   };
 
   home.stateVersion = "26.05";
