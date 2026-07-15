@@ -204,7 +204,6 @@ in
   home.packages = with pkgs; [
     lazygit
     thunar
-    pavucontrol
     mdadm
     brave
     google-chrome
