@@ -26,11 +26,8 @@ let
   create_symlink = path: config.lib.file.mkOutOfStoreSymlink path;
   configs = {
     ghostty = "ghostty";
-    i3 = "i3";
     nvim = "nvim";
     opencode = "opencode";
-    polybar = "polybar";
-    rofi = "rofi";
     tmux = "tmux";
     tmuxinator = "tmuxinator";
     zed = "zed";
@@ -49,6 +46,59 @@ in
   dconf.settings = {
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";
+      enable-hot-corners = false;
+    };
+    "org/gnome/desktop/wm/keybindings" = {
+      switch-to-workspace-1 = ["<Super>1"];
+      switch-to-workspace-2 = ["<Super>2"];
+      switch-to-workspace-3 = ["<Super>3"];
+      switch-to-workspace-4 = ["<Super>4"];
+      switch-to-workspace-5 = ["<Super>5"];
+      switch-to-workspace-6 = ["<Super>z"];
+      switch-to-workspace-7 = ["<Super>x"];
+      switch-to-workspace-8 = ["<Super>c"];
+      switch-to-workspace-9 = ["<Super>v"];
+      switch-to-workspace-10 = ["<Super>g"];
+      move-to-workspace-1 = ["<Super><Shift>1"];
+      move-to-workspace-2 = ["<Super><Shift>2"];
+      move-to-workspace-3 = ["<Super><Shift>3"];
+      move-to-workspace-4 = ["<Super><Shift>4"];
+      move-to-workspace-5 = ["<Super><Shift>5"];
+      move-to-workspace-6 = ["<Super><Shift>z"];
+      move-to-workspace-7 = ["<Super><Shift>x"];
+      move-to-workspace-8 = ["<Super><Shift>c"];
+      move-to-workspace-9 = ["<Super><Shift>v"];
+      move-to-workspace-10 = ["<Super><Shift>g"];
+      toggle-maximized = ["<Super>f"];
+      close = ["<Super>q"];
+    };
+    "org/gnome/mutter" = {
+      dynamic-workspaces = false;
+    };
+    "org/gnome/desktop/wm/preferences" = {
+      num-workspaces = 10;
+    };
+    "org/gnome/shell/keybindings" = {
+      toggle-overview = ["<Super>d"];
+      toggle-message-tray = [];
+      switch-to-application-1 = [];
+      switch-to-application-2 = [];
+      switch-to-application-3 = [];
+      switch-to-application-4 = [];
+      switch-to-application-5 = [];
+      switch-to-application-6 = [];
+      switch-to-application-7 = [];
+      switch-to-application-8 = [];
+      switch-to-application-9 = [];
+    };
+    "org/gnome/settings-daemon/plugins/media-keys" = {
+      terminal = ["<Super>Return"];
+    };
+    "org/gnome/desktop/screensaver" = {
+      lock-enabled = false;
+    };
+    "org/gnome/desktop/session" = {
+      idle-delay = 0;
     };
   };
 
@@ -148,15 +198,13 @@ in
 
   services.gpg-agent = {
     enable = true;
-    pinentryPackage = pkgs.pinentry-curses;
+    pinentry.package = pkgs.pinentry-curses;
   };
 
   home.packages = with pkgs; [
     lazygit
     thunar
-    dunst
     pavucontrol
-    lxappearance
     mdadm
     brave
     google-chrome
@@ -175,12 +223,10 @@ in
     hunk.packages.${pkgs.stdenv.hostPlatform.system}.default
     gh
     gnome-font-viewer
-    # gsettings-desktop-schemas
     dotnet-sdk_10
     nodejs
     tree-sitter
     roslyn-ls
-    xclip
     taskwarrior3
     kubectl
     kubernetes-helm
@@ -194,12 +240,8 @@ in
     borgbackup
     nautilus
     portfolio
-    nitrogen
     zed-editor
     vlc
-    xdotool
-    xbindkeys
-    xorg.xev
   ];
 
   home.sessionPath = [
@@ -208,27 +250,8 @@ in
     "$HOME/.config/herdr/bin"
   ];
 
-  services.dunst = {
-    enable = true;
-  };
-
   programs.starship = {
     enable = true;
-  };
-
-  services.polybar = {
-    enable = true;
-
-    script = ''
-      # kill old bars (important on reload)
-      killall -q polybar
-
-      # wait until it exits
-      while pgrep -x polybar >/dev/null; do sleep 0.2; done
-
-      # start bar (main monitor)
-      polybar main &
-    '';
   };
 
   programs.obsidian.cli.enable = true;

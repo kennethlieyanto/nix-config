@@ -36,12 +36,6 @@
 
   imports = [ ./hardware-configuration.nix ];
 
-  nixpkgs.config.packageOverrides = pkgs: {
-    polybar = pkgs.polybar.override {
-      i3Support = true;
-    };
-  };   
-
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -100,9 +94,7 @@
      wget
      git
      curl
-     kitty
      firefox
-     rofi
      polychromatic
      neovim
      ripgrep
@@ -147,22 +139,10 @@
   services.xserver = {
     enable = true;
     videoDrivers = ["nvidia"];
-
-    displayManager.lightdm.enable = true;
-
-    screenSection = ''
-      Option "metamodes" "DP-0: 1920x1080_165 +0+0"
-    '';
-
-    windowManager.i3 = {
-       enable = true;
-       extraPackages = with pkgs; [
-         i3status
-         i3lock
-         dmenu
-       ];
-    };
   };
+
+  services.desktopManager.gnome.enable = true;
+  services.displayManager.gdm.enable = true;
 
 
   hardware.graphics.enable = true;
