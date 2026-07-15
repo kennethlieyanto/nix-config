@@ -70,7 +70,7 @@ in
       move-to-workspace-9 = ["<Super><Shift>v"];
       move-to-workspace-10 = ["<Super><Shift>g"];
       toggle-maximized = ["<Super>f"];
-      close = ["<Super>q"];
+      close = ["<Super><Shift>q"];
     };
     "org/gnome/mutter" = {
       dynamic-workspaces = false;
@@ -92,7 +92,26 @@ in
       switch-to-application-9 = [];
     };
     "org/gnome/settings-daemon/plugins/media-keys" = {
-      terminal = ["<Super>Return"];
+      custom-keybindings = [
+        "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
+        "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/"
+        "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/"
+      ];
+    };
+    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
+      name = "Settings";
+      command = "gnome-control-center";
+      binding = "<Super>comma";
+    };
+    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
+      name = "Ghostty";
+      command = "ghostty";
+      binding = "<Super>Return";
+    };
+    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {
+      name = "Browser";
+      command = "xdg-open https://";
+      binding = "<Super>b";
     };
     "org/gnome/desktop/screensaver" = {
       lock-enabled = false;
@@ -222,6 +241,7 @@ in
     hunk.packages.${pkgs.stdenv.hostPlatform.system}.default
     gh
     gnome-font-viewer
+    dconf-editor
     dotnet-sdk_10
     nodejs
     tree-sitter
