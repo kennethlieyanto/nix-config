@@ -96,6 +96,7 @@ in
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/"
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/"
+        "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/"
       ];
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
@@ -112,6 +113,11 @@ in
       name = "Browser";
       command = "xdg-open https://";
       binding = "<Super>b";
+    };
+    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3" = {
+      name = "Files";
+      command = "nautilus";
+      binding = "<Super><Shift>Return";
     };
     "org/gnome/desktop/screensaver" = {
       lock-enabled = false;
