@@ -204,6 +204,11 @@
           devices = [ "kennethl-a35" ];
           ignorePerms = false; # Enable file permission syncing
         };
+        "Audiobooks" = {
+          path = "/home/kennethl/Audiobooks";
+          devices = [ "kennethl-a35" ];
+          ignorePerms = false; # Enable file permission syncing
+        };
       };
     };
   };
