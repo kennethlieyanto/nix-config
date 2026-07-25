@@ -110,6 +110,7 @@
      dnsutils
      pwgen
      openssl
+     gnome-tweaks
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
