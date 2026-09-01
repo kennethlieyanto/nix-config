@@ -116,7 +116,9 @@
   ];
 
   hardware.keyboard.qmk.enable = true;
-  services.udev.packages = [ pkgs.via ];
+  services.udev.packages = with pkgs; [
+    gnome-settings-daemon
+  ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

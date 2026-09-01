@@ -43,6 +43,7 @@ in
     })
     configs;
 
+  dconf.enable = true;
   dconf.settings = {
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";
@@ -121,6 +122,12 @@ in
     };
     "org/gnome/desktop/screensaver" = {
       lock-enabled = false;
+    };
+    "org/gnome/shell" = {
+      # disable-user-extensions = false;
+      enabled-extensions = with pkgs.gnomeExtensions; [
+        appindicator.extensionUuid
+      ];
     };
   };
 
@@ -223,6 +230,8 @@ in
     pinentry.package = pkgs.pinentry-curses;
   };
 
+  services.safeeyes.enable = true;
+
   home.packages = with pkgs; [
     lazygit
     thunar
@@ -265,6 +274,8 @@ in
     zed-editor
     vlc
     wev
+    safeeyes
+    gnomeExtensions.appindicator
   ];
 
   home.sessionPath = [
