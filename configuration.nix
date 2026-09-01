@@ -215,6 +215,11 @@
           devices = [ "kennethl-a35" ];
           ignorePerms = false; # Enable file permission syncing
         };
+        "Sync" = {
+          path = "/home/kennethl/Sync";
+          devices = [ "kennethl-a35" ];
+          ignorePerms = false; # Enable file permission syncing
+        };
       };
     };
   };
