@@ -122,9 +122,6 @@ in
     "org/gnome/desktop/screensaver" = {
       lock-enabled = false;
     };
-    "org/gnome/desktop/session" = {
-      idle-delay = 0;
-    };
   };
 
   programs.git = {
