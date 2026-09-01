@@ -264,6 +264,7 @@ in
     portfolio
     zed-editor
     vlc
+    wev
   ];
 
   home.sessionPath = [
