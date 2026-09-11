@@ -230,8 +230,6 @@ in
     pinentry.package = pkgs.pinentry-curses;
   };
 
-  services.safeeyes.enable = true;
-
   home.packages = with pkgs; [
     lazygit
     thunar
@@ -274,7 +272,8 @@ in
     zed-editor
     vlc
     wev
-    safeeyes
+    # safeeyes
+    stretchly
     gnomeExtensions.appindicator
   ];
 
