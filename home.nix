@@ -1,4 +1,10 @@
-{ config, pkgs, herdr, hunk, ... }:
+{
+  config,
+  pkgs,
+  herdr,
+  hunk,
+  ...
+}:
 
 let
   commonAliases = {
@@ -37,12 +43,10 @@ let
   };
 in
 {
-  xdg.configFile = builtins.mapAttrs
-    (name: subpath: {
-      source = create_symlink "${dotfiles}/${subpath}";
-      recursive = true;
-    })
-    configs;
+  xdg.configFile = builtins.mapAttrs (name: subpath: {
+    source = create_symlink "${dotfiles}/${subpath}";
+    recursive = true;
+  }) configs;
 
   xdg.desktopEntries.rider = {
     name = "Rider";
@@ -61,28 +65,28 @@ in
       enable-hot-corners = false;
     };
     "org/gnome/desktop/wm/keybindings" = {
-      switch-to-workspace-1 = ["<Super>1"];
-      switch-to-workspace-2 = ["<Super>2"];
-      switch-to-workspace-3 = ["<Super>3"];
-      switch-to-workspace-4 = ["<Super>4"];
-      switch-to-workspace-5 = ["<Super>5"];
-      switch-to-workspace-6 = ["<Super>z"];
-      switch-to-workspace-7 = ["<Super>x"];
-      switch-to-workspace-8 = ["<Super>c"];
-      switch-to-workspace-9 = ["<Super>v"];
-      switch-to-workspace-10 = ["<Super>g"];
-      move-to-workspace-1 = ["<Super><Shift>1"];
-      move-to-workspace-2 = ["<Super><Shift>2"];
-      move-to-workspace-3 = ["<Super><Shift>3"];
-      move-to-workspace-4 = ["<Super><Shift>4"];
-      move-to-workspace-5 = ["<Super><Shift>5"];
-      move-to-workspace-6 = ["<Super><Shift>z"];
-      move-to-workspace-7 = ["<Super><Shift>x"];
-      move-to-workspace-8 = ["<Super><Shift>c"];
-      move-to-workspace-9 = ["<Super><Shift>v"];
-      move-to-workspace-10 = ["<Super><Shift>g"];
-      toggle-maximized = ["<Super>f"];
-      close = ["<Super><Shift>q"];
+      switch-to-workspace-1 = [ "<Super>1" ];
+      switch-to-workspace-2 = [ "<Super>2" ];
+      switch-to-workspace-3 = [ "<Super>3" ];
+      switch-to-workspace-4 = [ "<Super>4" ];
+      switch-to-workspace-5 = [ "<Super>5" ];
+      switch-to-workspace-6 = [ "<Super>z" ];
+      switch-to-workspace-7 = [ "<Super>x" ];
+      switch-to-workspace-8 = [ "<Super>c" ];
+      switch-to-workspace-9 = [ "<Super>v" ];
+      switch-to-workspace-10 = [ "<Super>g" ];
+      move-to-workspace-1 = [ "<Super><Shift>1" ];
+      move-to-workspace-2 = [ "<Super><Shift>2" ];
+      move-to-workspace-3 = [ "<Super><Shift>3" ];
+      move-to-workspace-4 = [ "<Super><Shift>4" ];
+      move-to-workspace-5 = [ "<Super><Shift>5" ];
+      move-to-workspace-6 = [ "<Super><Shift>z" ];
+      move-to-workspace-7 = [ "<Super><Shift>x" ];
+      move-to-workspace-8 = [ "<Super><Shift>c" ];
+      move-to-workspace-9 = [ "<Super><Shift>v" ];
+      move-to-workspace-10 = [ "<Super><Shift>g" ];
+      toggle-maximized = [ "<Super>f" ];
+      close = [ "<Super><Shift>q" ];
     };
     "org/gnome/mutter" = {
       dynamic-workspaces = false;
@@ -91,17 +95,17 @@ in
       num-workspaces = 10;
     };
     "org/gnome/shell/keybindings" = {
-      toggle-overview = ["<Super>d"];
-      toggle-message-tray = [];
-      switch-to-application-1 = [];
-      switch-to-application-2 = [];
-      switch-to-application-3 = [];
-      switch-to-application-4 = [];
-      switch-to-application-5 = [];
-      switch-to-application-6 = [];
-      switch-to-application-7 = [];
-      switch-to-application-8 = [];
-      switch-to-application-9 = [];
+      toggle-overview = [ "<Super>d" ];
+      toggle-message-tray = [ ];
+      switch-to-application-1 = [ ];
+      switch-to-application-2 = [ ];
+      switch-to-application-3 = [ ];
+      switch-to-application-4 = [ ];
+      switch-to-application-5 = [ ];
+      switch-to-application-6 = [ ];
+      switch-to-application-7 = [ ];
+      switch-to-application-8 = [ ];
+      switch-to-application-9 = [ ];
     };
     "org/gnome/settings-daemon/plugins/media-keys" = {
       custom-keybindings = [
@@ -144,13 +148,13 @@ in
 
   programs.git = {
     enable = true;
-  
+
     settings = {
       user = {
         name = "Kenneth Manuel Lieyanto";
         email = "kennethlieyanto99@gmail.com";
       };
-  
+
       init.defaultBranch = "main";
       pull.rebase = true;
       core.editor = "nvim";
@@ -215,8 +219,14 @@ in
       };
       consistency = {
         checks = [
-          { name = "repository"; frequency = "2 weeks"; }
-          { name = "archives"; frequency = "1 month"; }
+          {
+            name = "repository";
+            frequency = "2 weeks";
+          }
+          {
+            name = "archives";
+            frequency = "1 month";
+          }
         ];
       };
     };
@@ -224,7 +234,7 @@ in
 
   programs.btop = {
     enable = true;
-  
+
     settings = {
       vim_keys = true;
     };
@@ -292,7 +302,8 @@ in
     netcoredbg
     direnv
     nixd
-    nixfmt
+    nixfmt # the one used by neovim support only single file
+    nixfmt-tree # for project formatting
   ];
 
   programs.vscode = {
@@ -364,12 +375,12 @@ in
 
   systemd.user.timers.task-sync = {
     Unit.Description = "Run task sync every 10 minutes";
-  
+
     Timer = {
       OnBootSec = "0";
       OnUnitActiveSec = "10m";
     };
-  
+
     Install.WantedBy = [ "timers.target" ];
   };
 

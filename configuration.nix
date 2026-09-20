@@ -4,8 +4,8 @@
   boot.swraid = {
     enable = true;
     mdadmConf = ''
-    ARRAY metadata=imsm UUID=ed52c932:3dc04989:ce96ef00:acb6561e devices=/dev/sdb,/dev/sdc
-    ARRAY /dev/md/RAID1MIRROR container=ed52c932:3dc04989:ce96ef00:acb6561e member=0 UUID=4e85d156:500f04ca:119b91fa:13dcf2ea
+      ARRAY metadata=imsm UUID=ed52c932:3dc04989:ce96ef00:acb6561e devices=/dev/sdb,/dev/sdc
+      ARRAY /dev/md/RAID1MIRROR container=ed52c932:3dc04989:ce96ef00:acb6561e member=0 UUID=4e85d156:500f04ca:119b91fa:13dcf2ea
     '';
   };
 
@@ -14,7 +14,7 @@
     ports = [ 22 ];
     settings = {
       PasswordAuthentication = true;
-      AllowUsers = ["kennethl"];
+      AllowUsers = [ "kennethl" ];
       UseDns = true;
       X11Forwarding = false;
       PermitRootLogin = "prohibit-password";
@@ -22,7 +22,7 @@
   };
   services.fail2ban.enable = true;
 
-  # Separate 1 TB HDD 
+  # Separate 1 TB HDD
   fileSystems."/mnt/data" = {
     device = "/dev/disk/by-uuid/82efbdbb-ad71-4d99-8ec3-b1fb9ef2fc71";
     fsType = "ext4";
@@ -60,8 +60,13 @@
   users.users."kennethl" = {
     isNormalUser = true;
     description = "Kenneth Lieyanto";
-    extraGroups = [ "networkmanager" "wheel" "video" "audio"];
-    packages = with pkgs; [];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "video"
+      "audio"
+    ];
+    packages = with pkgs; [ ];
     shell = pkgs.zsh;
 
     openssh.authorizedKeys.keys = [
@@ -84,37 +89,37 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-     ghostty
-     gnumake
-     gcc
-     psmisc
-     fzf
-     findutils
-     vim
-     wget
-     git
-     curl
-     firefox
-     polychromatic
-     neovim
-     ripgrep
-     fd
-     fzf
-     tmux
-     htop
-     libreoffice-qt
-     hunspell
-     hunspellDicts.uk_UA
-     hunspellDicts.id_ID
-     unzip
-     dnsutils
-     pwgen
-     openssl
-     gnome-tweaks
-     qmk
-     via
-     nix-ld
-     nixd
+    ghostty
+    gnumake
+    gcc
+    psmisc
+    fzf
+    findutils
+    vim
+    wget
+    git
+    curl
+    firefox
+    polychromatic
+    neovim
+    ripgrep
+    fd
+    fzf
+    tmux
+    htop
+    libreoffice-qt
+    hunspell
+    hunspellDicts.uk_UA
+    hunspellDicts.id_ID
+    unzip
+    dnsutils
+    pwgen
+    openssl
+    gnome-tweaks
+    qmk
+    via
+    nix-ld
+    nixd
   ];
 
   programs.nix-ld.enable = true;
@@ -142,7 +147,7 @@
   };
 
   services.libinput.enable = true;
-  
+
   services.libinput.mouse = {
     accelProfile = "flat";
     accelSpeed = "0";
@@ -150,12 +155,11 @@
 
   services.xserver = {
     enable = true;
-    videoDrivers = ["nvidia"];
+    videoDrivers = [ "nvidia" ];
   };
 
   services.desktopManager.gnome.enable = true;
   services.displayManager.gdm.enable = true;
-
 
   hardware.graphics.enable = true;
   hardware.nvidia = {
@@ -191,7 +195,7 @@
 
   hardware.openrazer = {
     enable = true;
-    users = ["kennethl"];
+    users = [ "kennethl" ];
   };
 
   programs.steam = {
@@ -208,7 +212,9 @@
     settings = {
       gui.user = "kennethl";
       devices = {
-        "kennethl-a35" = { id = "Y47XQJ5-V5WCQTX-N2MB5WS-Z6L6SGE-3KOKPCL-OCY5TJV-OIHFIB3-ZRSZJQI"; };
+        "kennethl-a35" = {
+          id = "Y47XQJ5-V5WCQTX-N2MB5WS-Z6L6SGE-3KOKPCL-OCY5TJV-OIHFIB3-ZRSZJQI";
+        };
       };
       folders = {
         "Vaults/notes" = {
@@ -247,7 +253,7 @@
   };
 
   services.gvfs.enable = true;
-  
+
   services.input-remapper = {
     enable = true;
 
@@ -258,7 +264,10 @@
   services.tailscale.enable = true;
   # Provide explicit upstream DNS so Tailscale MagicDNS always has
   # resolvers even if NetworkManager hasn't finished DHCP at boot
-  networking.nameservers = [ "1.1.1.1" "8.8.8.8" ];
+  networking.nameservers = [
+    "1.1.1.1"
+    "8.8.8.8"
+  ];
   networking.nftables.enable = true;
   networking.firewall = {
     enable = true;
@@ -270,16 +279,19 @@
 
   # 2. Force tailscaled to use nftables (Critical for clean nftables-only systems)
   # This avoids the "iptables-compat" translation layer issues.
-  systemd.services.tailscaled.serviceConfig.Environment = [ 
-    "TS_DEBUG_FIREWALL_MODE=nftables" 
+  systemd.services.tailscaled.serviceConfig.Environment = [
+    "TS_DEBUG_FIREWALL_MODE=nftables"
   ];
 
-  # 3. Optimization: Prevent systemd from waiting for network online 
+  # 3. Optimization: Prevent systemd from waiting for network online
   # (Optional but recommended for faster boot with VPNs)
-  systemd.network.wait-online.enable = false; 
+  systemd.network.wait-online.enable = false;
   boot.initrd.systemd.network.wait-online.enable = false;
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   networking.hosts = {
     "192.168.105.29" = [ "kditsvmvc.suryapamenang.local" ];

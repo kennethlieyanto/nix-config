@@ -4,14 +4,15 @@ let
 in
 pkgs.buildFHSEnv {
   name = "rider";
-  targetPkgs = p: with p; [
-    jetbrains.rider
-    dotnet-sdk_10
-    powershell
-    icu
-    openssl
-    zlib
-  ];
+  targetPkgs =
+    p: with p; [
+      jetbrains.rider
+      dotnet-sdk_10
+      powershell
+      icu
+      openssl
+      zlib
+    ];
   profile = ''
     export DOTNET_ROOT="${dotnet}/share/dotnet"
   '';

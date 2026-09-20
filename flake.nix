@@ -17,22 +17,31 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, herdr, hunk, ... }: {
-    nixosConfigurations.kennethl = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      modules = [
-        ./configuration.nix
-        home-manager.nixosModules.home-manager
-        {
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
-            users.kennethl = import ./home.nix;
-            backupFileExtension = "backup";
-            extraSpecialArgs = { inherit herdr hunk; };
-          };
-        }
-      ];
+  outputs =
+    {
+      self,
+      nixpkgs,
+      home-manager,
+      herdr,
+      hunk,
+      ...
+    }:
+    {
+      nixosConfigurations.kennethl = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./configuration.nix
+          home-manager.nixosModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              users.kennethl = import ./home.nix;
+              backupFileExtension = "backup";
+              extraSpecialArgs = { inherit herdr hunk; };
+            };
+          }
+        ];
+      };
     };
-  };
 }
