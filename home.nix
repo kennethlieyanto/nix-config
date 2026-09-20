@@ -289,6 +289,15 @@ in
     rider
   ];
 
+  programs.vscode = {
+    enable = true;
+    package = pkgs.vscode.fhsWithPackages (
+      ps: with ps; [
+        dotnet-sdk_10
+      ]
+    );
+  };
+
   home.sessionPath = [
     "$HOME/.local/bin"
     "$HOME/.config/tmux/bin"

@@ -113,7 +113,11 @@
      gnome-tweaks
      qmk
      via
+     nix-ld
+     nixd
   ];
+
+  programs.nix-ld.enable = true;
 
   hardware.keyboard.qmk.enable = true;
   services.udev.packages = with pkgs; [
