@@ -286,7 +286,9 @@ in
     # safeeyes
     stretchly
     gnomeExtensions.appindicator
+    powershell
     rider
+    netcoredbg
   ];
 
   programs.vscode = {
@@ -411,6 +413,7 @@ in
 
   home.sessionVariables = {
     TERMINAL = "ghostty";
+    DOTNET_ROOT = "${pkgs.dotnet-sdk_10}/share/dotnet/";
   };
 
   home.stateVersion = "26.05";
