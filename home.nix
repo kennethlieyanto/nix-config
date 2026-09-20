@@ -290,6 +290,7 @@ in
     rider
     bun
     netcoredbg
+    direnv
   ];
 
   programs.vscode = {
