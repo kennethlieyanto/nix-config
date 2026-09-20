@@ -292,6 +292,7 @@ in
     netcoredbg
     direnv
     nixd
+    nixfmt
   ];
 
   programs.vscode = {
