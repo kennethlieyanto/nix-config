@@ -288,6 +288,7 @@ in
     gnomeExtensions.appindicator
     powershell
     rider
+    bun
     netcoredbg
   ];
 
