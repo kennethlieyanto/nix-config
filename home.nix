@@ -325,6 +325,7 @@ in
     "$HOME/.local/bin"
     "$HOME/.config/tmux/bin"
     "$HOME/.config/herdr/bin"
+    "$HOME/.dotnet/tools"
   ];
 
   programs.starship = {
