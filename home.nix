@@ -246,6 +246,13 @@ in
     enableZshIntegration = true;
   };
 
+  programs.direnv = {
+    enable = true;
+    enableZshIntegration = true;
+    enableBashIntegration = true;
+    nix-direnv.enable = true;
+  };
+
   services.gpg-agent = {
     enable = true;
     pinentry.package = pkgs.pinentry-curses;
@@ -300,7 +307,6 @@ in
     rider
     bun
     netcoredbg
-    direnv
     nixd
     nixfmt # the one used by neovim support only single file
     nixfmt-tree # for project formatting
