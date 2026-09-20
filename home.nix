@@ -291,6 +291,7 @@ in
     bun
     netcoredbg
     direnv
+    nixd
   ];
 
   programs.vscode = {
