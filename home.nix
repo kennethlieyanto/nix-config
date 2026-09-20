@@ -24,6 +24,7 @@ let
 
   dotfiles = "${config.home.homeDirectory}/dotfiles";
   create_symlink = path: config.lib.file.mkOutOfStoreSymlink path;
+  rider = pkgs.callPackage ./pkgs/rider-fhs.nix { };
   configs = {
     ghostty = "ghostty";
     nvim = "nvim";
@@ -42,6 +43,16 @@ in
       recursive = true;
     })
     configs;
+
+  xdg.desktopEntries.rider = {
+    name = "Rider";
+    genericName = ".NET IDE from JetBrains";
+    comment = "JetBrains Rider is a .NET IDE based on the IntelliJ platform and ReSharper.";
+    exec = "rider";
+    icon = "rider";
+    categories = [ "Development" ];
+    settings.StartupWMClass = "jetbrains-rider";
+  };
 
   dconf.enable = true;
   dconf.settings = {
@@ -275,6 +286,7 @@ in
     # safeeyes
     stretchly
     gnomeExtensions.appindicator
+    rider
   ];
 
   home.sessionPath = [
