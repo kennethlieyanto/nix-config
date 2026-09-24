@@ -310,6 +310,7 @@ in
     nixd
     nixfmt # the one used by neovim support only single file
     nixfmt-tree # for project formatting
+    prettierd
   ];
 
   programs.vscode = {
