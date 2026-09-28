@@ -169,8 +169,7 @@ in
     shellAliases = commonAliases;
     defaultKeymap = "emacs";
     initContent = ''
-      bindkey -s '^f' 'tmux-sessionizer\n'
-      bindkey -s '^t' 'tmux-sessionizer -t\n'
+      bindkey -s '^f' 'herdr-sessionizer\n'
     '';
   };
 
