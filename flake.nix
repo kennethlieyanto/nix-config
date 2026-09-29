@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-26.05";
+    nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -21,6 +22,7 @@
     {
       self,
       nixpkgs,
+      nixpkgs-unstable,
       home-manager,
       herdr,
       hunk,
@@ -33,6 +35,14 @@
           ./configuration.nix
           home-manager.nixosModules.home-manager
           {
+            nixpkgs.overlays = [
+              (final: prev: {
+                esphome-device-builder = (import nixpkgs-unstable {
+                  inherit (prev.stdenv.hostPlatform) system;
+                  config.allowUnfree = true;
+                }).esphome-device-builder;
+              })
+            ];
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;

@@ -65,6 +65,8 @@
       "wheel"
       "video"
       "audio"
+      "dialout"
+      "uucp"
     ];
     packages = with pkgs; [ ];
     shell = pkgs.zsh;

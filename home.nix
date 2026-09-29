@@ -307,6 +307,8 @@ in
     nixfmt # the one used by neovim support only single file
     nixfmt-tree # for project formatting
     prettierd
+    esphome
+    esphome-device-builder
   ];
 
   programs.vscode = {
