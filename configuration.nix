@@ -65,6 +65,7 @@
       "wheel"
       "video"
       "audio"
+      "docker"
     ];
     packages = with pkgs; [ ];
     shell = pkgs.zsh;
@@ -259,6 +260,13 @@
 
     # Recommended if you frequently reconnect your mouse.
     enableUdevRules = true;
+  };
+
+  virtualisation.docker = {
+    enable = true;
+
+    # Periodically prune unused Docker resources.
+    autoPrune.enable = true;
   };
 
   services.tailscale.enable = true;
