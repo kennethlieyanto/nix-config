@@ -309,6 +309,7 @@ in
     prettierd
     esphome
     esphome-device-builder
+    lazydocker
   ];
 
   programs.vscode = {
