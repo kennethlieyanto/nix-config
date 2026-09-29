@@ -123,6 +123,7 @@
     via
     nix-ld
     nixd
+    wl-clipboard
   ];
 
   programs.nix-ld.enable = true;
