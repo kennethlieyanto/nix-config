@@ -313,6 +313,7 @@ in
     esphome
     esphome-device-builder
     lazydocker
+    taskwarrior-tui
   ];
 
   programs.vscode = {
