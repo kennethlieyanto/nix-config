@@ -25,6 +25,7 @@ let
     k = "kubectl";
     tree = "eza --tree --git-ignore";
     ns = "cd $HOME/nix-config && sudo nixos-rebuild switch --flake .#kennethl";
+    t = "task";
   };
 
   dotfiles = "${config.home.homeDirectory}/dotfiles";
@@ -37,6 +38,7 @@ let
     tmux = "tmux";
     tmuxinator = "tmuxinator";
     zed = "zed";
+    task = "task";
     herdr = "herdr";
   };
 in
@@ -281,6 +283,7 @@ in
     nodejs
     tree-sitter
     roslyn-ls
+    taskwarrior3
     kubectl
     kubernetes-helm
     k9s
@@ -369,6 +372,26 @@ in
       sync_address = "https://api.atuin.sh";
       search_mode = "fuzzy";
     };
+  };
+
+  systemd.user.services.task-sync = {
+    Unit.Description = "Taskwarrior sync";
+
+    Service = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.taskwarrior3}/bin/task sync";
+    };
+  };
+
+  systemd.user.timers.task-sync = {
+    Unit.Description = "Run task sync every 10 minutes";
+
+    Timer = {
+      OnBootSec = "0";
+      OnUnitActiveSec = "10m";
+    };
+
+    Install.WantedBy = [ "timers.target" ];
   };
 
   systemd.user.services.k3s-cluster-backup = {
