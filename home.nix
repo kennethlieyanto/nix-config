@@ -317,6 +317,7 @@ in
     lazydocker
     taskwarrior-tui
     gnomeExtensions.stopwatch
+    google-cloud-sdk
   ];
 
   programs.vscode = {
