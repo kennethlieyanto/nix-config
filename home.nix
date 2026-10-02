@@ -143,6 +143,7 @@ in
       # disable-user-extensions = false;
       enabled-extensions = with pkgs.gnomeExtensions; [
         appindicator.extensionUuid
+        stopwatch.extensionUuid
       ];
     };
   };
@@ -315,6 +316,7 @@ in
     esphome-device-builder
     lazydocker
     taskwarrior-tui
+    gnomeExtensions.stopwatch
   ];
 
   programs.vscode = {
