@@ -26,6 +26,7 @@ let
     tree = "eza --tree --git-ignore";
     ns = "cd $HOME/nix-config && sudo nixos-rebuild switch --flake .#kennethl";
     t = "task";
+    tt = "taskwarrior-tui";
   };
 
   dotfiles = "${config.home.homeDirectory}/dotfiles";
