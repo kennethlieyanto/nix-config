@@ -318,6 +318,7 @@ in
     taskwarrior-tui
     gnomeExtensions.stopwatch
     google-cloud-sdk
+    restic
   ];
 
   programs.vscode = {
