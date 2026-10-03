@@ -319,6 +319,7 @@ in
     gnomeExtensions.stopwatch
     google-cloud-sdk
     restic
+    bws
   ];
 
   programs.vscode = {
