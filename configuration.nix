@@ -124,6 +124,7 @@
     nix-ld
     nixd
     wl-clipboard
+    libsecret
   ];
 
   programs.nix-ld.enable = true;
