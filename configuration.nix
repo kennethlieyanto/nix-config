@@ -68,6 +68,7 @@
       "dialout"
       "uucp"
       "docker"
+      "input"
     ];
     packages = with pkgs; [ ];
     shell = pkgs.zsh;

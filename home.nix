@@ -114,6 +114,7 @@ in
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/"
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/"
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/"
+        "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/"
       ];
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
@@ -135,6 +136,11 @@ in
       name = "Files";
       command = "nautilus";
       binding = "<Super><Shift>Return";
+    };
+    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4" = {
+      name = "Toggle Handy Transcription";
+      command = "handy --toggle-transcription";
+      binding = "XF86Launch5";
     };
     "org/gnome/desktop/screensaver" = {
       lock-enabled = false;
@@ -260,6 +266,7 @@ in
   };
 
   home.packages = with pkgs; [
+    handy
     lazygit
     thunar
     mdadm
@@ -320,6 +327,8 @@ in
     google-cloud-sdk
     restic
     bws
+    wtype # needed by handy for dictation / voice typing
+    dotool # needed by handy for dictation / voice typing
   ];
 
   programs.vscode = {

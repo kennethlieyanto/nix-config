@@ -47,6 +47,7 @@
                 {
                   esphome-device-builder = unstable.esphome-device-builder;
                   opencode = unstable.opencode;
+                  handy = unstable.handy;
                 }
               )
             ];
