@@ -330,6 +330,7 @@ in
     wtype # needed by handy for dictation / voice typing
     dotool # needed by handy for dictation / voice typing
     sqlite
+    dbeaver-bin
   ];
 
   programs.vscode = {
