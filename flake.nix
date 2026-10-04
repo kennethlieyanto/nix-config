@@ -36,12 +36,19 @@
           home-manager.nixosModules.home-manager
           {
             nixpkgs.overlays = [
-              (final: prev: {
-                esphome-device-builder = (import nixpkgs-unstable {
-                  inherit (prev.stdenv.hostPlatform) system;
-                  config.allowUnfree = true;
-                }).esphome-device-builder;
-              })
+              (
+                final: prev:
+                let
+                  unstable = import nixpkgs-unstable {
+                    inherit (prev.stdenv.hostPlatform) system;
+                    config.allowUnfree = true;
+                  };
+                in
+                {
+                  esphome-device-builder = unstable.esphome-device-builder;
+                  opencode = unstable.opencode;
+                }
+              )
             ];
             home-manager = {
               useGlobalPkgs = true;
