@@ -329,6 +329,7 @@ in
     bws
     wtype # needed by handy for dictation / voice typing
     dotool # needed by handy for dictation / voice typing
+    sqlite
   ];
 
   programs.vscode = {
