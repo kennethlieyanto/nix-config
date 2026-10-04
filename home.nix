@@ -331,6 +331,11 @@ in
     dotool # needed by handy for dictation / voice typing
     sqlite
     dbeaver-bin
+    gjs # for developing gnome extensions
+    glib # for developing gnome extensions
+    glib.dev
+    gtk4 # for developing gnome extensions
+    libadwaita # for developing gnome extensions
   ];
 
   programs.vscode = {
