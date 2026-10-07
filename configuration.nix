@@ -49,6 +49,12 @@
   # Enable networking
   networking.networkmanager.enable = true;
 
+  # Prefer the directly connected home LAN over Tailscale's overlapping
+  # subnet route, while falling back to Tailscale when away from home.
+  networking.localCommands = ''
+    ${pkgs.iproute2}/bin/ip rule add priority 5200 to 192.168.18.0/24 lookup main suppress_prefixlength 0 2>/dev/null || true
+  '';
+
   # Set your time zone.
   time.timeZone = "Asia/Jakarta";
 
