@@ -126,6 +126,7 @@
     nixd
     wl-clipboard
     libsecret
+    traceroute
   ];
 
   programs.nix-ld.enable = true;
