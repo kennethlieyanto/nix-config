@@ -188,54 +188,43 @@ in
     enableZshIntegration = true; # or enableBashIntegration
   };
 
-  programs.borgmatic = {
-    enable = true;
-    backups."kennethl-ws" = {
-      location = {
-        sourceDirectories = [
-          "${config.home.homeDirectory}/Documents"
-          "${config.home.homeDirectory}/Pictures"
-          "${config.home.homeDirectory}/Videos"
-          "${config.home.homeDirectory}/Calibre Library"
-          "${config.home.homeDirectory}/Music"
-          "${config.home.homeDirectory}/Vaults"
-        ];
-        repositories = [
-          {
-            path = "/mnt/backup/borg-repositories/kennethl-ws";
-            label = "local";
-          }
-        ];
-        extraConfig = {
-          exclude_patterns = [
-            ".cache"
-            ".local/share/Trash"
-          ];
-        };
-      };
-      storage = {
-        encryptionPasscommand = "${pkgs.pass}/bin/pass backup/borg";
-        extraConfig = {
-          compression = "auto,zstd";
-        };
-      };
-      retention = {
-        keepDaily = 7;
-        keepWeekly = 4;
-        keepMonthly = 6;
-      };
-      consistency = {
-        checks = [
-          {
-            name = "repository";
-            frequency = "2 weeks";
-          }
-          {
-            name = "archives";
-            frequency = "1 month";
-          }
-        ];
-      };
+  services.restic.enable = true;
+
+  services.restic.backups.kennethl-ws = {
+    repository = "/mnt/backup/restic-repositories/kennethl-ws";
+    initialize = true;
+
+    paths = [
+      "${config.home.homeDirectory}/Documents"
+      "${config.home.homeDirectory}/Pictures"
+      "${config.home.homeDirectory}/Videos"
+      "${config.home.homeDirectory}/Calibre Library"
+      "${config.home.homeDirectory}/Music"
+      "${config.home.homeDirectory}/Vaults"
+      "${config.home.homeDirectory}/.ssh"
+    ];
+
+    exclude = [
+      "**/.cache"
+      "**/.local/share/Trash"
+    ];
+
+    passwordFile = "${config.home.homeDirectory}/.config/restic/password";
+
+    extraBackupArgs = [
+      "--compression"
+      "max"
+    ];
+    pruneOpts = [
+      "--keep-daily 7"
+      "--keep-weekly 4"
+      "--keep-monthly 6"
+    ];
+
+    timerConfig = {
+      OnCalendar = "*-*-* 03:00:00";
+      RandomizedDelaySec = "30min";
+      Persistent = true;
     };
   };
 
@@ -276,7 +265,6 @@ in
     obsidian
     opencode
     starship
-    borgmatic
     pass
     gnupg
     pinentry-curses
@@ -438,21 +426,20 @@ in
     Install.WantedBy = [ "timers.target" ];
   };
 
-  systemd.user.services.borgmatic = {
-    Unit.Description = "Run borgmatic backup";
+  systemd.user.services.restic-check-kennethl-ws = {
+    Unit.Description = "Weekly restic data integrity check";
 
     Service = {
       Type = "oneshot";
-      ExecStart = "${pkgs.borgmatic}/bin/borgmatic";
+      ExecStart = "${config.home.profileDirectory}/bin/restic-kennethl-ws check --read-data-subset=5%";
     };
   };
 
-  systemd.user.timers.borgmatic = {
-    Unit.Description = "Run borgmatic backup daily at 03:00";
+  systemd.user.timers.restic-check-kennethl-ws = {
+    Unit.Description = "Weekly restic data check";
 
     Timer = {
-      OnCalendar = "*-*-* 03:00:00";
-      RandomizedDelaySec = "30min";
+      OnCalendar = "weekly";
       Persistent = true;
     };
 
