@@ -13,6 +13,9 @@ declaratively in `home.nix` via home-manager's `services.restic.backups` module.
 | Backup service/timer | `restic-backups-kennethl-ws.{service,timer}` |
 | Weekly check timer | `restic-check-kennethl-ws.timer` |
 | CLI wrapper | `restic-kennethl-ws` |
+| Success notifier | `notify-restic backup-success` (via `ExecStartPost`) |
+| Staleness timer | `restic-stale-check.timer` |
+| Alert sender | `restic-notify@kennethlieyanto.com` (Resend API) |
 
 The repo is encrypted; the password is a user-only file, never in the Nix store
 or git.
@@ -81,9 +84,57 @@ restic-kennethl-ws key list
 restic-kennethl-ws key remove <old-key-id>
 ```
 
+## Notifications
+
+Email alerts are sent via the [Resend](https://resend.com) HTTP API (no SMTP
+server needed). There are two kinds:
+
+1. **Success** — every *fully successful* backup run sends an email immediately
+   (systemd `ExecStartPost=` on `restic-backups-kennethl-ws.service`, which only
+   runs when all of backup/prune/check exit 0). The body summarises the new
+   snapshot.
+2. **Staleness** — a daily watchdog (`restic-stale-check.timer`, 09:00,
+   `Persistent=true`) reads the newest snapshot and emails if it is older than
+   **7 days** (or if the repository is unreadable/empty). While still stale it
+   re-reminds at most every **3 days**; it clears itself once a fresh backup
+   lands.
+
+There are deliberately **no per-run failure emails**: if the machine is simply
+off, no run happens and nothing is sent — the staleness watchdog is what tells
+you backups have lapsed. Because the watchdog is a local, persistent timer, a
+long power-off is reported at the next boot alongside the catch-up backup.
+
+- **Sender:** `restic-notify@kennethlieyanto.com` (verified domain).
+- **Recipient:** `kennethlieyanto99@gmail.com`.
+- **API key:** `~/.config/restic-notify/api-key` (mode `0600`, not in the Nix
+  store or git). Override the path with `RESTIC_NOTIFY_API_KEY_FILE`.
+- **Stale state:** `~/.local/state/restic-notify/last-stale-alert` (re-alert
+  throttle; removed automatically when a fresh backup is seen).
+
+Test delivery:
+
+```sh
+notify-restic backup-success                     # preview the success email now
+systemctl --user start restic-backups-kennethl-ws.service   # full end-to-end
+systemctl --user start restic-stale-check.service           # no-op when healthy
+journalctl --user -u restic-backups-kennethl-ws.service     # ExecStartPost logs
+```
+
+Rotate the API key by creating a new one in Resend and overwriting the file:
+
+```sh
+printf '%s' 're_...' > ~/.config/restic-notify/api-key && chmod 600 ~/.config/restic-notify/api-key
+```
+
 ## Troubleshooting
 
 - **Service fails:** `journalctl --user -xeu restic-backups-kennethl-ws.service`.
+- **No success email:** check `journalctl --user -u restic-backups-kennethl-ws.service`
+  for the `notify-restic backup-success` run; verify the API key file is readable
+  and the domain is verified in Resend. (An email failure cannot mark the backup
+  failed — the hook is prefixed with `-`.)
+- **No staleness alert:** `systemctl --user list-timers restic-stale-check.timer`;
+  run `journalctl --user -u restic-stale-check.service`.
 - **Wrong/missing password file:** ensure it exists, is correct, and is `0600`.
 - **Disk not mounted:** `mount | grep backup` (repo needs `/mnt/backup`).
 - **Repo missing:** `initialize = true` creates it on first successful run.
