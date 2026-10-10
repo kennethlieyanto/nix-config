@@ -410,6 +410,11 @@ in
     pinentry-curses
     calibre
     go
+    cargo
+    rustc
+    clippy
+    rustfmt
+    rust-analyzer
     eza
     herdr.packages.${pkgs.system}.default
     hunk.packages.${pkgs.stdenv.hostPlatform.system}.default
