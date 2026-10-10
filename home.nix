@@ -468,6 +468,7 @@ in
     gtk4 # for developing gnome extensions
     libadwaita # for developing gnome extensions
     exercism
+    rustlings
   ];
 
   programs.vscode = {
