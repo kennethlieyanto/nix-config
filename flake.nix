@@ -16,6 +16,10 @@
       url = "github:modem-dev/hunk";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    tw-gnome = {
+      url = "path:/home/kennethl/projects/personal/tw-gnome";
+      flake = false;
+    };
   };
 
   outputs =
@@ -26,6 +30,7 @@
       home-manager,
       herdr,
       hunk,
+      tw-gnome,
       ...
     }:
     {
@@ -56,7 +61,7 @@
               useUserPackages = true;
               users.kennethl = import ./home.nix;
               backupFileExtension = "backup";
-              extraSpecialArgs = { inherit herdr hunk; };
+              extraSpecialArgs = { inherit herdr hunk tw-gnome; };
             };
           }
         ];

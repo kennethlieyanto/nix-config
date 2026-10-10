@@ -3,6 +3,7 @@
   pkgs,
   herdr,
   hunk,
+  tw-gnome,
   ...
 }:
 
@@ -24,7 +25,7 @@ let
     tf = "terraform";
     k = "kubectl";
     tree = "eza --tree --git-ignore";
-    ns = "cd $HOME/nix-config && sudo nixos-rebuild switch --flake .#kennethl";
+    ns = "cd $HOME/nix-config && nix flake update tw-gnome && sudo nixos-rebuild switch --flake .#kennethl";
     t = "task";
     tt = "taskwarrior-tui";
   };
@@ -32,6 +33,9 @@ let
   dotfiles = "${config.home.homeDirectory}/dotfiles";
   create_symlink = path: config.lib.file.mkOutOfStoreSymlink path;
   rider = pkgs.callPackage ./pkgs/rider-fhs.nix { };
+  taskwarrior-extension = pkgs.callPackage ./pkgs/tw-gnome.nix {
+    src = tw-gnome;
+  };
   configs = {
     ghostty = "ghostty";
     nvim = "nvim";
@@ -145,13 +149,15 @@ in
     "org/gnome/desktop/screensaver" = {
       lock-enabled = false;
     };
-    "org/gnome/shell" = {
-      # disable-user-extensions = false;
-      enabled-extensions = with pkgs.gnomeExtensions; [
-        appindicator.extensionUuid
-        stopwatch.extensionUuid
-      ];
-    };
+  };
+
+  programs.gnome-shell = {
+    enable = true;
+    extensions = [
+      { package = pkgs.gnomeExtensions.appindicator; }
+      { package = pkgs.gnomeExtensions.stopwatch; }
+      { package = taskwarrior-extension; }
+    ];
   };
 
   programs.git = {
@@ -298,7 +304,6 @@ in
     wev
     # safeeyes
     stretchly
-    gnomeExtensions.appindicator
     powershell
     rider
     bun
@@ -311,7 +316,6 @@ in
     esphome-device-builder
     lazydocker
     taskwarrior-tui
-    gnomeExtensions.stopwatch
     google-cloud-sdk
     restic
     bws

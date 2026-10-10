@@ -172,7 +172,8 @@
         "home-manager": "home-manager",
         "hunk": "hunk",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-unstable": "nixpkgs-unstable"
+        "nixpkgs-unstable": "nixpkgs-unstable",
+        "tw-gnome": "tw-gnome"
       }
     },
     "rust-overlay": {
@@ -231,6 +232,19 @@
         "owner": "numtide",
         "repo": "treefmt-nix",
         "type": "github"
+      }
+    },
+    "tw-gnome": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1791602377,
+        "narHash": "sha256-NvS49QMrDt8MtsJtZq4Ry+OHm2xUadaqdPzqMPOdkg4=",
+        "path": "/home/kennethl/projects/personal/tw-gnome",
+        "type": "path"
+      },
+      "original": {
+        "path": "/home/kennethl/projects/personal/tw-gnome",
+        "type": "path"
       }
     }
   },
