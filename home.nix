@@ -592,6 +592,7 @@ in
   home.sessionVariables = {
     TERMINAL = "ghostty";
     DOTNET_ROOT = "${pkgs.dotnet-sdk_10}/share/dotnet/";
+    RUST_SRC_PATH = "${pkgs.rustPlatform.rustLibSrc}";
   };
 
   home.stateVersion = "26.05";
