@@ -50,99 +50,99 @@ let
       jq
     ];
     text = ''
-      api_key_file="''${RESTIC_NOTIFY_API_KEY_FILE:-${resticAlertApiKeyFile}}"
-      to="${resticAlertTo}"
-      from="Restic Backup <${resticAlertFrom}>"
-      restic="${resticWrapper}"
-      mode="''${1:-}"
+            api_key_file="''${RESTIC_NOTIFY_API_KEY_FILE:-${resticAlertApiKeyFile}}"
+            to="${resticAlertTo}"
+            from="Restic Backup <${resticAlertFrom}>"
+            restic="${resticWrapper}"
+            mode="''${1:-}"
 
-      if [ ! -r "$api_key_file" ]; then
-        echo "notify-restic: cannot read API key file: $api_key_file" >&2
-        exit 1
-      fi
-
-      send() {
-        jq -n --arg from "$from" --arg to "$to" --arg subject "$1" --arg text "$2" \
-          '{from:$from,to:[$to],subject:$subject,text:$text}' |
-          curl --fail-with-body -sS -X POST "https://api.resend.com/emails" \
-            -H "Authorization: Bearer $(cat "$api_key_file")" \
-            -H "Content-Type: application/json" \
-            --data-binary @-
-      }
-
-      case "$mode" in
-        backup-success)
-          host="$(uname -n)"
-          if snap="$( "$restic" snapshots --latest 1 --json --no-lock 2>/dev/null )"; then
-            short_id="$(printf '%s' "$snap" | jq -r '.[0].short_id // "-"')"
-            snap_time="$(printf '%s' "$snap" | jq -r '.[0].time // "-"')"
-            files_new="$(printf '%s' "$snap" | jq -r '.[0].summary.files_new // "-"')"
-            files_changed="$(printf '%s' "$snap" | jq -r '.[0].summary.files_changed // "-"')"
-            files_unmodified="$(printf '%s' "$snap" | jq -r '.[0].summary.files_unmodified // "-"')"
-            data_added="$(printf '%s' "$snap" | jq -r '.[0].summary.data_added // 0' | numfmt --to=iec)"
-            total="$(printf '%s' "$snap" | jq -r '.[0].summary.total_bytes_processed // 0' | numfmt --to=iec)"
-            body="restic backup succeeded on $host at $(date -Is).
-
-snapshot:           $short_id ($snap_time)
-files new/changed:  $files_new / $files_changed
-files unmodified:   $files_unmodified
-data added:         $data_added
-bytes processed:    $total"
-          else
-            body="restic backup succeeded on $host at $(date -Is).
-(could not read snapshot details)"
-          fi
-          send "[$host] restic backup OK" "$body"
-          ;;
-        stale-check)
-          host="$(uname -n)"
-          state_dir="''${XDG_STATE_HOME:-$HOME/.local/state}/restic-notify"
-          alert_file="$state_dir/last-stale-alert"
-          threshold=604800
-          remind=259200
-          now="$(date +%s)"
-          mkdir -p "$state_dir"
-
-          recently_alerted() {
-            [ -f "$alert_file" ] && [ $(( now - $(cat "$alert_file") )) -lt "$remind" ]
-          }
-
-          if ! snap="$( "$restic" snapshots --latest 1 --json --no-lock 2>/dev/null )"; then
-            if ! recently_alerted; then
-              printf '%s' "$now" > "$alert_file"
-              send "[$host] restic: repository unreadable" \
-                "Could not read the restic repository at $(date -Is). Check that /mnt/backup is mounted."
+            if [ ! -r "$api_key_file" ]; then
+              echo "notify-restic: cannot read API key file: $api_key_file" >&2
+              exit 1
             fi
-            exit 0
-          fi
 
-          latest="$(printf '%s' "$snap" | jq -r '.[0].time // empty')"
-          if [ -z "$latest" ]; then
-            if ! recently_alerted; then
-              printf '%s' "$now" > "$alert_file"
-              send "[$host] restic: no snapshots found" \
-                "The repository contains no snapshots."
-            fi
-            exit 0
-          fi
+            send() {
+              jq -n --arg from "$from" --arg to "$to" --arg subject "$1" --arg text "$2" \
+                '{from:$from,to:[$to],subject:$subject,text:$text}' |
+                curl --fail-with-body -sS -X POST "https://api.resend.com/emails" \
+                  -H "Authorization: Bearer $(cat "$api_key_file")" \
+                  -H "Content-Type: application/json" \
+                  --data-binary @-
+            }
 
-          age=$(( now - $(date -d "$latest" +%s) ))
-          if [ "$age" -le "$threshold" ]; then
-            rm -f "$alert_file"
-            exit 0
-          fi
+            case "$mode" in
+              backup-success)
+                host="$(uname -n)"
+                if snap="$( "$restic" snapshots --latest 1 --json --no-lock 2>/dev/null )"; then
+                  short_id="$(printf '%s' "$snap" | jq -r '.[0].short_id // "-"')"
+                  snap_time="$(printf '%s' "$snap" | jq -r '.[0].time // "-"')"
+                  files_new="$(printf '%s' "$snap" | jq -r '.[0].summary.files_new // "-"')"
+                  files_changed="$(printf '%s' "$snap" | jq -r '.[0].summary.files_changed // "-"')"
+                  files_unmodified="$(printf '%s' "$snap" | jq -r '.[0].summary.files_unmodified // "-"')"
+                  data_added="$(printf '%s' "$snap" | jq -r '.[0].summary.data_added // 0' | numfmt --to=iec)"
+                  total="$(printf '%s' "$snap" | jq -r '.[0].summary.total_bytes_processed // 0' | numfmt --to=iec)"
+                  body="restic backup succeeded on $host at $(date -Is).
 
-          if ! recently_alerted; then
-            printf '%s' "$now" > "$alert_file"
-            send "[$host] restic: no backup in $(( age / 86400 )) days" \
-              "Newest snapshot is from $latest ($(( age / 86400 )) days ago)."
-          fi
-          ;;
-        *)
-          echo "usage: notify-restic {backup-success|stale-check}" >&2
-          exit 2
-          ;;
-      esac
+      snapshot:           $short_id ($snap_time)
+      files new/changed:  $files_new / $files_changed
+      files unmodified:   $files_unmodified
+      data added:         $data_added
+      bytes processed:    $total"
+                else
+                  body="restic backup succeeded on $host at $(date -Is).
+      (could not read snapshot details)"
+                fi
+                send "[$host] restic backup OK" "$body"
+                ;;
+              stale-check)
+                host="$(uname -n)"
+                state_dir="''${XDG_STATE_HOME:-$HOME/.local/state}/restic-notify"
+                alert_file="$state_dir/last-stale-alert"
+                threshold=604800
+                remind=259200
+                now="$(date +%s)"
+                mkdir -p "$state_dir"
+
+                recently_alerted() {
+                  [ -f "$alert_file" ] && [ $(( now - $(cat "$alert_file") )) -lt "$remind" ]
+                }
+
+                if ! snap="$( "$restic" snapshots --latest 1 --json --no-lock 2>/dev/null )"; then
+                  if ! recently_alerted; then
+                    printf '%s' "$now" > "$alert_file"
+                    send "[$host] restic: repository unreadable" \
+                      "Could not read the restic repository at $(date -Is). Check that /mnt/backup is mounted."
+                  fi
+                  exit 0
+                fi
+
+                latest="$(printf '%s' "$snap" | jq -r '.[0].time // empty')"
+                if [ -z "$latest" ]; then
+                  if ! recently_alerted; then
+                    printf '%s' "$now" > "$alert_file"
+                    send "[$host] restic: no snapshots found" \
+                      "The repository contains no snapshots."
+                  fi
+                  exit 0
+                fi
+
+                age=$(( now - $(date -d "$latest" +%s) ))
+                if [ "$age" -le "$threshold" ]; then
+                  rm -f "$alert_file"
+                  exit 0
+                fi
+
+                if ! recently_alerted; then
+                  printf '%s' "$now" > "$alert_file"
+                  send "[$host] restic: no backup in $(( age / 86400 )) days" \
+                    "Newest snapshot is from $latest ($(( age / 86400 )) days ago)."
+                fi
+                ;;
+              *)
+                echo "usage: notify-restic {backup-success|stale-check}" >&2
+                exit 2
+                ;;
+            esac
     '';
   };
 
@@ -467,6 +467,7 @@ in
     glib.dev
     gtk4 # for developing gnome extensions
     libadwaita # for developing gnome extensions
+    exercism
   ];
 
   programs.vscode = {
